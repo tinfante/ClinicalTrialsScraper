@@ -8,7 +8,8 @@ import sys
 from BeautifulSoup import BeautifulSoup
 
 
-URL = 'https://clinicaltrials.gov/ct2/results?term=heart+attack&recr=&rslt=&type=&cond=&intr=&titles=&outc=&spons=&lead=&id=&state1=&cntry1=SA%3ACL&state2=&cntry2=&state3=&cntry3=&locn=&gndr=&rcv_s=&rcv_e=&lup_s=&lup_e='  # 54
+# Search URL below returns 54 results.
+URL = 'https://clinicaltrials.gov/ct2/results?term=heart+attack&cntry1=SA%3ACL'
 DELAY = 1
 
 
@@ -92,25 +93,40 @@ def get_study(study_url):
             interventions = [l for l in cols[1].prettify().split('\n')
                              if not l.startswith('<') and l]
             interventions = [entities.unescape(l) for l in interventions]
+            interventions.sort()
             study['interventions'] = interventions
         except IndexError:
             study['interventions'] = ''
-        loc_table = content.find('table', {'class': 'layout_table indent2'})
+        loc_table = content.find(
+            'table', {'class': 'layout_table indent2',
+                      'summary': 'Layout table for location information'})
         loc_items = loc_table.findAll('tr')
         found_target = False
         locations = []
         for tr_i in range(len(loc_items)):
-            country_td = loc_items[tr_i].find('td', {'class': 'header3'})
+            country_td = loc_items[tr_i].find('td',
+                                              {'class': 'header3',
+                                               'style': 'padding-top:2ex'})
             if country_td:
                 if country_td.getText() != 'Chile':
                     found_target = False
             if found_target is True:
-                hospital = loc_items[tr_i].find('td', {'headers': 'locName'})
-                if hospital:
-                    loc = [loc_items[tr_i].getText(),
-                           loc_items[tr_i+1].getText()]
-                    loc = [li for li in loc if li]
-                    loc_str = entities.unescape('; '.join(loc))
+                name_td = loc_items[tr_i].find('td', {'headers': 'locName'})
+                if name_td:
+                    loc_name = \
+                        loc_items[tr_i].find(
+                            'td', {'headers': 'locName'}).getText()
+                    loc_status = \
+                        loc_items[tr_i].find(
+                            'td', {'headers': 'locStatus'}).getText()
+                    loc_place = loc_items[tr_i+1].getText()
+                    loc_str = ''
+                    if loc_status:
+                        loc_str += '[' + loc_status.upper() + '] '
+                    if loc_name:
+                        loc_str += loc_name + '; '
+                    loc_str += loc_place
+                    loc_str = entities.unescape(loc_str)
                     locations.append(loc_str)
             if country_td:
                 if country_td.getText() == 'Chile':
@@ -185,13 +201,3 @@ def main(url):
 
 if __name__ == '__main__':
     main(URL)
-
-    # URLS FOR STUDIES WITH LISTED LOCATIONS THAT AREN'T GETTING SCRAPED.
-    url1 = 'https://clinicaltrials.gov/ct2/show/study/NCT01776424?show_locs=Y#locn'
-    url2 = 'https://clinicaltrials.gov/ct2/show/study/NCT01764633?show_locs=Y#locn'
-    url3 = 'https://clinicaltrials.gov/ct2/show/study/NCT01261273?show_locs=Y#locn'
-    url4 = 'https://clinicaltrials.gov/ct2/show/study/NCT01468701?show_locs=Y#locn'
-    url5 = 'https://clinicaltrials.gov/ct2/show/study/NCT01991795?show_locs=Y#locn'
-    url6 = 'https://clinicaltrials.gov/ct2/show/study/NCT01945268?show_locs=Y#locn'
-    url7 = 'https://clinicaltrials.gov/ct2/show/study/NCT01858532?show_locs=Y#locn'
-    url8 = 'https://clinicaltrials.gov/ct2/show/study/NCT01574703?show_locs=Y#locn'

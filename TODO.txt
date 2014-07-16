@@ -7,31 +7,7 @@ CLINICALTRIALS.GOV SCRAPER PROBLEMS & TODO
 ------------------------------------------------------------------------------
 
 
-2. Locations not scraped because of their html formatting. Fix get_study()
-   function so that it scrapes the locations from the urls listed below.
-   At the moment the function is returning an empty locations list for these
-   urls.
-
-https://clinicaltrials.gov/ct2/show/study/NCT01776424?show_locs=Y#locn  # Rank 11
-https://clinicaltrials.gov/ct2/show/study/NCT01764633?show_locs=Y#locn  # Rank 19
-https://clinicaltrials.gov/ct2/show/study/NCT01261273?show_locs=Y#locn  # Rank 26
-https://clinicaltrials.gov/ct2/show/study/NCT01468701?show_locs=Y#locn  # Rank 28
-https://clinicaltrials.gov/ct2/show/study/NCT01991795?show_locs=Y#locn  # Rank 32
-https://clinicaltrials.gov/ct2/show/study/NCT01945268?show_locs=Y#locn  # Rank 38
-https://clinicaltrials.gov/ct2/show/study/NCT01858532?show_locs=Y#locn  # Rank 39 
-https://clinicaltrials.gov/ct2/show/study/NCT01574703?show_locs=Y#locn  # Rank 44
-
-This happens when locations specify if that particular location
-is recruiting or isn't. It apparently only happens with studies that
-are currently recruiting or not yet recruiting.
-
-Studies rank 46, 47, 48, 50 and 52 are also problematic. Rank numbers refer to
-the enumeration of the results returned by the search url defined (variable
-"SEARCH_URL") at the top of scrape.py.
-------------------------------------------------------------------------------
-
-
-4. Make the script itself store the data in a file (whose name is given as an
+2. Make the script itself store the data in a file (whose name is given as an
    argument from the command line) instead of redirecting stdout when calling
    the script. That way when the script is running it can print its progress
    without affecting the final output.
