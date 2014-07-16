@@ -186,20 +186,12 @@ def main(url):
 if __name__ == '__main__':
     main(URL)
 
-    # URLS FOR STUDIES (APPARENTLY IT'S THE ONES THAT ARE CURRENTLY RECRUITING
-    # OR NOT YET RECRUITING) WITH LISTED LOCATIONS THAT AREN'T GETTING SCRAPED.
-    url1 = 'https://clinicaltrials.gov/ct2/show/study/NCT01776424?show_locs=Y#locn'  # Rank 11
-    url2 = 'https://clinicaltrials.gov/ct2/show/study/NCT01764633?show_locs=Y#locn'  # Rank 19
-    url3 = 'https://clinicaltrials.gov/ct2/show/study/NCT01261273?show_locs=Y#locn'  # Rank 26
-    url4 = 'https://clinicaltrials.gov/ct2/show/study/NCT01468701?show_locs=Y#locn'  # Rank 28
-    url5 = 'https://clinicaltrials.gov/ct2/show/study/NCT01991795?show_locs=Y#locn'  # Rank 32
-    url6 = 'https://clinicaltrials.gov/ct2/show/study/NCT01945268?show_locs=Y#locn'  # Rank 38
-    url7 = 'https://clinicaltrials.gov/ct2/show/study/NCT01858532?show_locs=Y#locn'  # Rank 39 
-    url8 = 'https://clinicaltrials.gov/ct2/show/study/NCT01574703?show_locs=Y#locn'  # Rank 44
-    # STUDIES RANK 46, 47, 48, 50 and 52 ARE ALSO PROBLEMATIC. RANK NUMBERS
-    # REFER TO THE ENUMERATION OF RESULTS RETURNED BY THE SEARCH URL DEFINED
-    # (VARIABLE "SEARCH_URL") AT THE TOP OF THIS FILE.
-
-    # TODO: Fix get_study() function so that the above studies' locations are
-    # scraped. At the moment, the function is returning an empty locations list
-    # for the urls above.
+    # URLS FOR STUDIES WITH LISTED LOCATIONS THAT AREN'T GETTING SCRAPED.
+    url1 = 'https://clinicaltrials.gov/ct2/show/study/NCT01776424?show_locs=Y#locn'
+    url2 = 'https://clinicaltrials.gov/ct2/show/study/NCT01764633?show_locs=Y#locn'
+    url3 = 'https://clinicaltrials.gov/ct2/show/study/NCT01261273?show_locs=Y#locn'
+    url4 = 'https://clinicaltrials.gov/ct2/show/study/NCT01468701?show_locs=Y#locn'
+    url5 = 'https://clinicaltrials.gov/ct2/show/study/NCT01991795?show_locs=Y#locn'
+    url6 = 'https://clinicaltrials.gov/ct2/show/study/NCT01945268?show_locs=Y#locn'
+    url7 = 'https://clinicaltrials.gov/ct2/show/study/NCT01858532?show_locs=Y#locn'
+    url8 = 'https://clinicaltrials.gov/ct2/show/study/NCT01574703?show_locs=Y#locn'
