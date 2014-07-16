@@ -2,12 +2,7 @@ CLINICALTRIALS.GOV SCRAPER PROBLEMS & TODO
 ==========================================
 
 
-1. Fucked up text formatting for 'Purposes' when these have paragraphs (<p>)
-   or lists (<li>) in them.
-------------------------------------------------------------------------------
-
-
-2. Make the script itself store the data in a file (whose name is given as an
+1. Make the script itself store the data in a file (whose name is given as an
    argument from the command line) instead of redirecting stdout when calling
    the script. That way when the script is running it can print its progress
    without affecting the final output.

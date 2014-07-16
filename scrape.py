@@ -82,7 +82,23 @@ def get_study(study_url):
         sponsor = content.find('div', {'id': 'sponsor'})
         study['sponsor'] = entities.unescape(sponsor.getText())
         purpose = content.find('div', {'class': 'body3'})
-        study['purpose'] = entities.unescape(purpose.getText())
+        purpose_children = purpose.findChildren(recursive=False)
+        purpose_lines = []
+        for child in purpose_children:
+            if child.name.lower() == 'p':
+                paragraph = '\t' + child.getText().strip()
+                purpose_lines.append(paragraph)
+            if child.name.lower() == 'ul':
+                for list_item in child.findChildren(recursive=False):
+                    # Next 3 lines probably unecessary. Left just in case list
+                    # has children that are not 'li'.
+                    if list_item.name.lower() != 'li':
+                        print 'List has a children that is not \'li\'.'
+                        raw_input('press ENTER to continue...')
+                    list_item_str = '\t  - ' + list_item.getText()
+                    purpose_lines.append(list_item_str)
+        purpose_string = '\n'.join(purpose_lines)
+        study['purpose'] = entities.unescape(purpose_string)
         purpose_table = content.find('table', {'class': 'data_table'})
         cols = purpose_table.findAll('td', {'class': 'body3'})
         conditions = [l for l in cols[0].prettify().split('\n')
@@ -177,7 +193,8 @@ def main(url):
         study = get_study(study_url + '?show_locs=Y#locn')
         print 'TITLE:', study['title'].encode('utf-8')
         print 'SPONSOR:', study['sponsor'].encode('utf-8')
-        print 'PURPOSE:', study['purpose'].encode('utf-8')
+        print 'PURPOSE:'
+        print study['purpose'].encode('utf-8')
         if len(study['conditions']) == 0:
             print 'CONDITIONS: None listed.'
         else:
