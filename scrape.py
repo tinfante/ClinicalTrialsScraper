@@ -9,7 +9,7 @@ from BeautifulSoup import BeautifulSoup
 
 
 URL = 'https://clinicaltrials.gov/ct2/results?term=heart+attack&recr=&rslt=&type=&cond=&intr=&titles=&outc=&spons=&lead=&id=&state1=&cntry1=SA%3ACL&state2=&cntry2=&state3=&cntry3=&locn=&gndr=&rcv_s=&rcv_e=&lup_s=&lup_e='  # 54
-DELAY = 2
+DELAY = 1
 
 
 entities = HTMLParser.HTMLParser()
@@ -149,24 +149,25 @@ def search_ct(search_url):
 
 def main(url):
     search_results = search_ct(url)
-    print
     print 'SEARCH URL:', url
     print '%s RESULTS FOUND.' % len(search_results)
-    print
+    print '=' * 79
     for r in search_results:
         print
         print 'RANK:', r['rank']
         print 'ID:', r['id']
-        study_url = 'https://clinicaltrials.gov/ct2/show/' + r['id'] + \
-            '?show_locs=Y#locn'
+        study_url = 'https://clinicaltrials.gov/ct2/show/' + r['id']
         print 'URL:', study_url
-        study = get_study(study_url)
+        study = get_study(study_url + '?show_locs=Y#locn')
         print 'TITLE:', study['title'].encode('utf-8')
         print 'SPONSOR:', study['sponsor'].encode('utf-8')
         print 'PURPOSE:', study['purpose'].encode('utf-8')
-        print 'CONDITIONS:'
-        for c in study['conditions']:
-            print '\t' + c.encode('utf-8')
+        if len(study['conditions']) == 0:
+            print 'CONDITIONS: None listed.'
+        else:
+            print 'CONDITIONS:'
+            for c in study['conditions']:
+                print '\t' + c.encode('utf-8')
         if len(study['interventions']) == 0:
             print 'INTERVENTIONS: None listed.'
         else:
@@ -179,10 +180,26 @@ def main(url):
             print 'LOCATIONS:'
             for l in study['locations']:
                 print '\t' + l.encode('utf-8')
-        print
-        if int(r['rank']) > 24:
-            raw_input('press ENTER')
+        #raw_input('===[ Press ENTER to continue ]===')
 
 
 if __name__ == '__main__':
     main(URL)
+
+    # URLS FOR STUDIES (APPARENTLY IT'S THE ONES THAT ARE CURRENTLY RECRUITING
+    # OR NOT YET RECRUITING) WITH LISTED LOCATIONS THAT AREN'T GETTING SCRAPED.
+    url1 = 'https://clinicaltrials.gov/ct2/show/study/NCT01776424?show_locs=Y#locn'  # Rank 11
+    url2 = 'https://clinicaltrials.gov/ct2/show/study/NCT01764633?show_locs=Y#locn'  # Rank 19
+    url3 = 'https://clinicaltrials.gov/ct2/show/study/NCT01261273?show_locs=Y#locn'  # Rank 26
+    url4 = 'https://clinicaltrials.gov/ct2/show/study/NCT01468701?show_locs=Y#locn'  # Rank 28
+    url5 = 'https://clinicaltrials.gov/ct2/show/study/NCT01991795?show_locs=Y#locn'  # Rank 32
+    url6 = 'https://clinicaltrials.gov/ct2/show/study/NCT01945268?show_locs=Y#locn'  # Rank 38
+    url7 = 'https://clinicaltrials.gov/ct2/show/study/NCT01858532?show_locs=Y#locn'  # Rank 39 
+    url8 = 'https://clinicaltrials.gov/ct2/show/study/NCT01574703?show_locs=Y#locn'  # Rank 44
+    # STUDIES RANK 46, 47, 48, 50 and 52 ARE ALSO PROBLEMATIC. RANK NUMBERS
+    # REFER TO THE ENUMERATION OF RESULTS RETURNED BY THE SEARCH URL DEFINED
+    # (VARIABLE "SEARCH_URL") AT THE TOP OF THIS FILE.
+
+    # TODO: Fix get_study() function so that the above studies' locations are
+    # scraped. At the moment, the function is returning an empty locations list
+    # for the urls above.
