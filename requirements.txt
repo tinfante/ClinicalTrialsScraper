@@ -1,0 +1,10 @@
+# Using Python 2.7.3 and pip 1.1.
+# Below - the real requirements for the project.
+BeautifulSoup==3.2.1
+# Below - the packages installed by my mkvirtualenv hook.
+ipython==0.13.1
+yolk==0.4.3
+# Below - the default packages installed by virtualenv.
+argparse==1.2.1
+distribute==0.6.24
+wsgiref==0.1.2
