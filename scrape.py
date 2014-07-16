@@ -107,10 +107,11 @@ def get_study(study_url):
             if found_target is True:
                 hospital = loc_items[tr_i].find('td', {'headers': 'locName'})
                 if hospital:
-                    loc = '%s; %s' % (loc_items[tr_i].getText(),
-                                      loc_items[tr_i+1].getText())
-                    loc = entities.unescape(loc)
-                    locations.append(loc)
+                    loc = [loc_items[tr_i].getText(),
+                           loc_items[tr_i+1].getText()]
+                    loc = [li for li in loc if li]
+                    loc_str = entities.unescape('; '.join(loc))
+                    locations.append(loc_str)
             if country_td:
                 if country_td.getText() == 'Chile':
                     found_target = True
@@ -166,14 +167,21 @@ def main(url):
         print 'CONDITIONS:'
         for c in study['conditions']:
             print '\t' + c.encode('utf-8')
-        print 'INTERVENTIONS:'
-        for i in study['interventions']:
-            print '\t' + i.encode('utf-8')
-        print 'LOCATIONS:'
-        for l in study['locations']:
-            print '\t' + l.encode('utf-8')
+        if len(study['interventions']) == 0:
+            print 'INTERVENTIONS: None listed.'
+        else:
+            print 'INTERVENTIONS:'
+            for i in study['interventions']:
+                print '\t' + i.encode('utf-8')
+        if len(study['locations']) == 0:
+            print 'LOCATIONS: None listed.'
+        else:
+            print 'LOCATIONS:'
+            for l in study['locations']:
+                print '\t' + l.encode('utf-8')
         print
-        raw_input('press ENTER')
+        if int(r['rank']) > 24:
+            raw_input('press ENTER')
 
 
 if __name__ == '__main__':
