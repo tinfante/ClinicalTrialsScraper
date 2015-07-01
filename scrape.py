@@ -8,8 +8,8 @@ import sys
 from BeautifulSoup import BeautifulSoup
 
 
-# Search URL below returns 54 results.
-URL = 'https://clinicaltrials.gov/ct2/results?term=heart+attack&cntry1=SA%3ACL'
+URL = 'https://clinicaltrials.gov/ct2/results?term=&recr=Recruiting&rslt=&type=Intr&cond=cancer&intr=&titles=&outc=&spons=&lead=&id=&state1=&cntry1=NA%3AMX&state2=&cntry2=&state3=&cntry3=&locn=&gndr=&rcv_s=&rcv_e=&lup_s=&lup_e='
+COUNTRY = 'Mexico'
 DELAY = 1
 
 
@@ -124,7 +124,7 @@ def get_study(study_url):
                                               {'class': 'header3',
                                                'style': 'padding-top:2ex'})
             if country_td:
-                if country_td.getText() != 'Chile':
+                if country_td.getText() != COUNTRY:
                     found_target = False
             if found_target is True:
                 name_td = loc_items[tr_i].find('td', {'headers': 'locName'})
@@ -145,7 +145,7 @@ def get_study(study_url):
                     loc_str = entities.unescape(loc_str)
                     locations.append(loc_str)
             if country_td:
-                if country_td.getText() == 'Chile':
+                if country_td.getText() == COUNTRY:
                     found_target = True
         study['locations'] = locations
     return study
